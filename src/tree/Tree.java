@@ -10,14 +10,26 @@ package tree;
  * @author a.efemwonkieke
  */
 public class Tree {
+    private Tree parent_ = null;
    private Tree left_ = null;
    private Tree right_ = null;
+
    private Comparable data_;
    public Tree(Comparable data) {
        data_ = data;
        right_ = null;
        left_ = null;
 
+   }
+   public Tree(Comparable data, Tree parent) {
+       data_ = data;
+       parent_ = parent;
+       right_ = null;
+       left_ = null;
+       
+   }
+   public Tree parent() {
+       return parent_;
    }
    public Tree left() {
        return left_;
@@ -31,25 +43,31 @@ public class Tree {
        return data_;
    }
    
+   public void setParent(Tree parent) {
+       parent_ = parent;
+   }
+    public void setLeft(Tree left) {
+      left_ = left;
+   }
    public void setRight(Tree right) {
       right_ = right;
    }
    
-   public void setLeft(Tree left) {
-      left_ = left;
+ 
+   public void setData(Comparable data) {
+       data_ = data;
    }
-   
    public void add(Comparable data) {
        addR(this, data);
    }
    
    private void addR(Tree t, Comparable data) {
        if (t.right() == null && data.compareTo(t.data()) >= 0) {
-           t.setRight(new Tree(data));
+           t.setRight(new Tree(data, t));
            return;
        }
        else if  (t.left() == null && data.compareTo(t.data()) < 0) {
-             t.setLeft(new Tree(data));
+             t.setLeft(new Tree(data, t));
            return;
        }           
        else if (data.compareTo(t.data()) > 1) {
@@ -59,26 +77,55 @@ public class Tree {
            addR(t.left(), data);
        }    
    }
-   public void remove(Comparable data) {
-       removeR(this, data);
+   private void delete(Tree t) {
+       if (t.parent().data().compareTo(t.data()) < 1) {
+                   t.parent().setRight(null);
+               }
+               else { // We know that parent's data cannot equal child's data 
+                   t.parent().setLeft(null);
+        }
+               return;
    }
-   private void removeR(Tree t, Comparable data) {
-       if (t == null) {
-           return;
+   public void remove(Comparable data) {
+       Tree t = find(data); // to remove
+       if (t.left() == null && t.right() == null) {
+           if (t.parent() != null) {
+               delete(t);
+           }
+           else {
+               // What happens now?
+           }
        }
-       if (t.left().data().compareTo(data) == 0) {
-           t.setLeft(null);
-           return;
+       if (t.right() != null) {          
+           Tree r = findMin(t.right());
+           t.setData(r.data());
+           delete(r);
        }
-       else if (t.right().data().compareTo(data) == 0) {
-           t.setRight(null);
-           return;
+       else if (t.left() != null) {
+           t = t.left();
        }
-       if (t.data().compareTo(data) > 1) {
-           removeR(t.right(), data);
+   }
+   public Tree findMin(Tree t) {
+       if (t.left() == null) 
+           return t;
+       else {
+           return findMin(t.left());
        }
-       else if (t.data().compareTo(data) < 1) {
-           removeR(t.left(), data);
+   }
+   public Tree find(Comparable toFind) {
+       return findR(this, toFind);
+   }
+   private Tree findR(Tree t, Comparable toFind) {
+       if (t == null) 
+           return null;
+       if (t.data().compareTo(toFind) > 0) {
+           return findR(t.left(), toFind);
+       }
+       else if (t.data().compareTo(toFind) < 0) {
+           return findR(t.right(), toFind);
+       }
+       else {
+           return t;
        }
    }
    public void preOrder() {
