@@ -13,21 +13,18 @@ public class Tree {
    private Tree parent_ = null;
    private Tree left_ = null;
    private Tree right_ = null;
-   private int family_ = 0; // number of trees below the depth of this one
 
    private Comparable data_ = null;
    public Tree() {
    }
    public Tree(Comparable data) {
        data_ = data;
-       family_ = 1;
        right_ = null;
        left_ = null;
 
    }
    public Tree(Comparable data, Tree parent) {
        data_ = data;
-       family_ = 1;
        parent_ = parent;
        right_ = null;
        left_ = null;
@@ -47,9 +44,6 @@ public class Tree {
    public Comparable data() {
        return data_;
    }
-   public int size() {
-       return family_;
-   }
    
    public void setParent(Tree parent) {
        parent_ = parent;
@@ -68,7 +62,6 @@ public class Tree {
    public void add(Comparable data) {
        if (data_ == null) {
            data_ = data;
-           family_++;
            return;
        }
        
@@ -78,12 +71,10 @@ public class Tree {
    private void addR(Tree t, Comparable data) {
        if (t.right() == null && data.compareTo(t.data()) > 0) {
            t.setRight(new Tree(data, t));
-           family_++;
            return;
        }
        else if  (t.left() == null && data.compareTo(t.data()) < 0) {
              t.setLeft(new Tree(data, t));
-             family_++;
            return;
        }           
        else if (data.compareTo(t.data()) > 0) {
@@ -109,7 +100,6 @@ public class Tree {
        if (t.left() == null && t.right() == null) {
            if (t.parent() != null) {
                delete(t);
-               family_--;
            }
            else {
                // t must be the root tree with no children
@@ -120,7 +110,6 @@ public class Tree {
            Tree r = findMin(t.right());
            t.setData(r.data());
            delete(r);
-           family_--;
        }
        else if (t.left() != null) {
            t = t.left();
@@ -181,7 +170,4 @@ public class Tree {
        System.out.println(t.data());
    }
    
-   /*
-    * Rebalance
-   */
 }

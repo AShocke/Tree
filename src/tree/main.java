@@ -26,7 +26,6 @@ public class main {
         System.out.println();
         t.remove(53);
         t.inOrder();
-        System.out.println(t.size());
     }
     
     public static void testHeap() {
