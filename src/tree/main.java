@@ -30,11 +30,13 @@ public class main {
     
     public static void testHeap() {
         int size = 10;
-        Comparable[] c = new Comparable[size];
+        Comparable[] c = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        /*
         for (int i = 0; i < size; i++) {
             c[i] = (int) (Math.random() * 100);
             System.out.print(c[i] + " ");
         }
+*/
         System.out.println();
         Heap h = new Heap(c);
         System.out.println(h.size() + " " + h.capacity());
